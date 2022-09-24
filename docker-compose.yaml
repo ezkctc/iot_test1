@@ -25,4 +25,12 @@ services:
       - "8123:8123"
     devices:
       - /dev/ttyUSB0:/dev/ttyUSB0
+      
+    mqtt:
+      broker: 127.0.0.1
 
+    sensor:
+      - platform: mqtt
+        name: "Lottery"
+        state_topic: "home-assistant/lottery/number"
+        unit_of_measurement: "No."
