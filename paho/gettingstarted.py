@@ -6,7 +6,7 @@ def on_connect(client, userdata, flags, rc):
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
-    client.subscribe("$testtopicdlsutest/#")
+    client.subscribe("$SYS/#")
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
@@ -16,9 +16,9 @@ client = mqtt.Client(client_id="clientId-E", clean_session=True, userdata=None, 
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("broker.hivemq.com", 1883, 8000)
-
-# Blocking call that processes network traffic, dispatches callbacks and
+client.connect("mqtt.eclipseprojects.io", 1883, 60)
+print('hi')
+# Blocking call that     processes network traffic, dispatches callbacks and
 # handles reconnecting 
 # Other loop*() functions are available that give a threaded interface and a
 # manual interface.

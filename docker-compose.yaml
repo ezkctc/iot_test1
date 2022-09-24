@@ -26,11 +26,15 @@ services:
     devices:
       - /dev/ttyUSB0:/dev/ttyUSB0
       
-    mqtt:
-      broker: 127.0.0.1
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
 
-    sensor:
-      - platform: mqtt
-        name: "Lottery"
-        state_topic: "home-assistant/lottery/number"
-        unit_of_measurement: "No."
+    # network_mode: host
+    volumes:
+        - /opt/mosquitto:/mosquitto
+    # volumes:
+    #   - /opt/mosquitto:/mosquitto
+    ports:
+      - 1883:1883
+      - 9001:9001   
