@@ -1,5 +1,5 @@
 import random
-
+import json
 from paho.mqtt import client as mqtt_client
 
 
@@ -10,6 +10,8 @@ topic = "testtopic/#"
 client_id = f'python-mqtt-{random.randint(0, 100)}'
 username = 'admin'
 password = '$7$101$rJ2xzRQELEL+tPqN$vrwtnSajWBmeiLwIjqMzBQkAPj74cLXuuewmUn5eL6Wtd7aCugkaiO5jJhDfyvFZyD7lX/SahiXZCLnf8SrqbQ=='
+
+
 
 
 def connect_mqtt() -> mqtt_client:
@@ -33,13 +35,20 @@ def subscribe(client: mqtt_client):
     client.subscribe(topic)
     client.on_message = on_message
 
+def on_publish(client,userdata,result):             #create function for callback
+    print("data published \n")
+    pass
 
 def run():
     client = connect_mqtt()
     
-    
+    x = {
+        "msg": "hello there"
+        }
 
     subscribe(client)
+    client.on_publish = on_publish  
+    client.publish("testtopic",json.dumps(x))   
     client.loop_forever()
 
 

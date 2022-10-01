@@ -25,7 +25,9 @@ services:
       - "8123:8123"
     devices:
       - /dev/ttyUSB0:/dev/ttyUSB0
-      
+  
+
+          
   mosquitto:
     image: eclipse-mosquitto
     container_name: mosquitto
