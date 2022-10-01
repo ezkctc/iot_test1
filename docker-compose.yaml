@@ -29,10 +29,12 @@ services:
   mosquitto:
     image: eclipse-mosquitto
     container_name: mosquitto
-
+    restart: always
     # network_mode: host
     volumes:
-        - /opt/mosquitto:/mosquitto
+        - ./config:/mosquitto/config
+        - ./config:/mosquitto/data
+        - ./config:/mosquitto/log
     # volumes:
     #   - /opt/mosquitto:/mosquitto
     ports:
