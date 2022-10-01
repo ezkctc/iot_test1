@@ -8,8 +8,8 @@ port = 1883
 topic = "testtopic/#"
 # generate client ID with pub prefix randomly
 client_id = f'python-mqtt-{random.randint(0, 100)}'
-# username = 'emqx'
-# password = 'public'
+username = 'admin'
+password = '$7$101$rJ2xzRQELEL+tPqN$vrwtnSajWBmeiLwIjqMzBQkAPj74cLXuuewmUn5eL6Wtd7aCugkaiO5jJhDfyvFZyD7lX/SahiXZCLnf8SrqbQ=='
 
 
 def connect_mqtt() -> mqtt_client:
@@ -20,7 +20,7 @@ def connect_mqtt() -> mqtt_client:
             print("Failed to connect, return code %d\n", rc)
 
     client = mqtt_client.Client(client_id)
-    client.username_pw_set("admin", "$7$101$rJ2xzRQELEL+tPqN$vrwtnSajWBmeiLwIjqMzBQkAPj74cLXuuewmUn5eL6Wtd7aCugkaiO5jJhDfyvFZyD7lX/SahiXZCLnf8SrqbQ==")
+    client.username_pw_set(username, password)
     client.on_connect = on_connect
     client.connect(broker, port)
     return client
