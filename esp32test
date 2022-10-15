@@ -1,0 +1,85 @@
+#include <Arduino.h>
+#include <WiFi.h>
+#include <PubSubClient.h>
+
+const char *SSID = "";
+const char *PWD = "";
+
+WiFiClient wifiClient;
+PubSubClient mqttClient(wifiClient); 
+char *mqttServer = "broker.emqx.io";
+int mqttPort = 1883;
+
+
+const char* mqtt_user = "";
+
+const char* mqtt_pass = "";
+
+void connectToWiFi() {
+  Serial.print("Connectiog to ");
+ 
+  WiFi.begin(SSID, PWD);
+  Serial.println(SSID);
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(".");
+    delay(500);
+  }
+  Serial.print("Connected.");
+  
+}
+
+void callback(char* topic, byte* payload, unsigned int length) {
+  Serial.print("Callback - ");
+  Serial.print("Message:");
+  for (int i = 0; i < length; i++) {
+    Serial.print((char)payload[i]);
+  }
+}
+
+void setupMQTT() {
+  mqttClient.setServer(mqttServer, mqttPort);
+
+  // set the callback function
+  mqttClient.setCallback(callback);
+}
+
+void reconnect() {
+  Serial.println("Connecting to MQTT Broker...");
+  while (!mqttClient.connected()) {
+      Serial.println("Reconnecting to MQTT Broker..");
+      String clientId = "ESP32Client-";
+      clientId += String(random(0xffff), HEX);
+      
+      if (mqttClient.connect(clientId.c_str())        ) {
+        Serial.println("Connected.");
+        // subscribe to topic
+        mqttClient.subscribe("/testtopic/#");
+      }
+      
+  }
+}
+
+
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  connectToWiFi();
+  setupMQTT();
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  if (!mqttClient.connected())
+    reconnect();
+  
+
+  mqttClient.loop();
+
+  long now = millis();
+  long last_time = 0;
+  if (now - last_time > 3000) {
+    mqttClient.publish("/testtopic/#","hello there from esp32");
+    last_time = now;
+  }
+}
